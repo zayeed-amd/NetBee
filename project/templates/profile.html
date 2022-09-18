@@ -1,0 +1,56 @@
+<!-- templates/profile.html -->
+
+{% extends "base2.html" %}
+
+{% block head %}
+<link href="../static/css/tables.css" rel="stylesheet" />
+{% endblock %}
+
+
+{% block body %}
+<h1 class="title">
+  Welcome {{ user.username }}!
+</h1>
+
+<div class="container-fluid">
+  <p>Name: {{user.username}}</p>
+  <p>Email: {{user.email}}</p>
+
+  {% for r in role %}
+  <p>Role: {{r.Role.role_name}}</p>
+  <p>Description: {{r.Role.role_desc}}</p>
+  <p></p>
+  {% endfor %}
+
+  API details:
+  <table border="1" id="customers">
+    <tr>
+      <th>API Provider</th>
+      <th>API Key</th>
+      <th>Date</th>
+    </tr>
+
+  {% for api in api_info %}
+  <tr>
+    <td style="border:1">{{api.Api.api_provider}}</td>
+    <td>{{api.Api.api_key}}</td>
+    <td>{{api.Api.date_created.date()}}</td>
+  </tr>
+
+  {% endfor %}
+  </table>
+
+
+</div>
+{% endblock %}
+
+<!--
+1. Profile Name
+2. email
+3. Password
+4. Role
+5. API key
+6. Image
+
+
+-->

@@ -1,0 +1,63 @@
+{% extends 'base2.html' %}
+
+{% block head %}
+<h1> Template </h1>
+<!--link href="../static/css/tables.css" rel="stylesheet" />
+<link href="../static/css/search.css" rel="stylesheet" /-->
+<script src="../static/js/Utils.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+<script>
+     $(document).ready(function () {
+      $('select').selectize({
+          sortField: 'text'
+      });
+  });
+</script>
+
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid">
+  <h1 class="mt-4">Organizations</h1>
+  {% if errors%}
+        <p>{{errors}}</p>
+  {% endif %}
+  <!--input type="text" id="myInput" onkeyup="searchTableData()" placeholder="Search for names.." -->
+  <!-- https://stackoverflow.com/questions/18796221/creating-a-select-box-with-a-search-option -->
+  <select id="myInput" onchange="searchTableData()" placeholder="Search Organization...">
+      <option value="">Select Organization</option>
+      {% for org in orgs %}
+            <option value="{{org.name}}">{{org.name}}</option>
+      {% endfor %}
+  </select>
+  <table border="1"  id="myTable">
+        <tr class="header">
+            <th style="width:20%;">Org ID</th>
+            <th style="width:30%;">Name</th>
+            <th>Url</th>
+            <th>Edit</th>
+        </tr>
+        {% for org in orgs %}
+       <!-- ['id', 'name', 'url', 'api', 'licensing', 'cloud'] -->
+        <tr>
+            <td>{{org.id}}</td>
+            <td>{{org.name}}</td>
+            <td>{{org.url}}</td>
+            <td>
+                <a href="/role/delete/{{org.id}}">Delete</a><br>
+                <a href="/update/{{org.id}}">Update</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <form action="/" method="POST">
+        <input type="text" name="content" id="content">
+        <input type="submit" name="submit" value="Add Task">
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base2.html' %}
+
+{% block head %}
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid">
+    <h1>
+        APIs Manager
+    </h1>
+    {% if errors%}
+        <p>{{errors}}</p>
+    {% endif %}
+
+    <table border="1">
+        <tr>
+            <th>Provider</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>API Key</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+        {% for a in api %}
+        <tr>
+            <td>{{a.api_provider}}</td>
+            <td>{{a.api_username}}</td>
+            <td>{{a.api_password}}</td>
+            <td>{{a.api_key}}</td>
+            <td>{{a.date_created.date()}}</td>
+            {% if user.role_id == 1 %}
+            <td>
+                <a href="api/delete/{{a.id}}">Delete</a><br>
+                <a href="api/update/{{a.id}}">Update</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if user.role_id == 1 %}
+    <form action="/api" method="POST">
+       Provider: <input type="text" name="api_provider" id="api_provider"><br>
+       Username: <input type="text" name="api_username" id="api_username"><br>
+       Password: <input type="text" name="api_password" id="api_password"><br>
+       API Key: <input type="text" name="api_key" id="api_key"><br>
+        <input type="submit" name="submit" value="Add API">
+    </form>
+    {% endif %}
+
+</div>
+{% endblock %}

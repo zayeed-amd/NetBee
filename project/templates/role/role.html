@@ -1,0 +1,47 @@
+{% extends 'base2.html' %}
+
+{% block head %}
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid">
+    <h1>
+        Application Role Manager
+    </h1>
+    {% if errors%}
+        <p>{{errors}}</p>
+    {% endif %}
+
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Desc</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+        {% for role in roles %}
+        <tr>
+            <td>{{role.role_name}}</td>
+            <td>{{role.role_desc}}</td>
+            <td>{{role.date_created.date()}}</td>
+            {% if user.role_id == 1 %}
+            <td>
+                <a href="role/delete/{{role.id}}">Delete</a><br>
+                <a href="role/update/{{role.id}}">Update</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if user.role_id == 1 %}
+    <form action="/role" method="POST">
+       Role Name: <input type="text" name="role_name" id="role_name"><br>
+       Role Desc: <input type="text" name="role_desc" id="role_desc"><br>
+        <input type="submit" name="submit" value="Add Role">
+    </form>
+    {% endif %}
+
+</div>
+{% endblock %}
