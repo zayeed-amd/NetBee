@@ -1,0 +1,60 @@
+{% extends 'base2.html' %}
+
+{% block head %}
+<link href="../static/css/tables.css" rel="stylesheet" />
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid">
+    <h1>
+        Manage Users
+    </h1>
+    {% if errors%}
+        <p>{{errors}}</p>
+    {% endif %}
+
+    <table border="1" id="customers">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Permission Type</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+        {% for ui in users_info %}
+        <tr>
+            <td>{{ui.User.username}}</td>
+            <td>{{ui.User.email}}</td>
+            <td>{{ui.Permission.permission_name}}</td>
+            <td>{{ui.User.date_created.date()}}</td>
+            {% if current_user.permission_id == 3 or  current_user.permission_id == 4 %}
+            <td>
+                {% if ui.User.id != current_user.id %}
+                <p>{{current_user.id}}</p>
+                <a href="users/delete/{{ui.User.id}}">Delete</a><br>
+                {% endif %}
+                <a href="users/update/{{ui.User.id}}">Update</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if current_user.permission_id in [3, 4] %}
+    <form action="/users" method="POST">
+       Username: <input type="text" name="username" id="username"><br>
+       Email: <input type="text" name="email" id="email"><br>
+       Password: <input type="password" name="password" id="password"><br>
+       Permission:
+        <select name="permission_type">
+            {% for p in permissions %}
+                <option value="{{p.id}}">{{p.permission_name}}</option>
+            {% endfor %}
+        </select><br>
+        <input type="submit" name="submit" value="Add User">
+    </form>
+    {% endif %}
+
+</div>
+{% endblock %}

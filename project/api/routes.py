@@ -4,7 +4,7 @@ from flask_login import login_required
 
 # from project.app_object import app
 from project import db
-from project.models import Role, User, Api
+from project.models import Permission, User, Api
 
 # from werkzeug.security import generate_password_hash, check_password_hash
 # from flask_login import login_user, logout_user, login_required
@@ -61,7 +61,7 @@ def delete(id):
 @api.route('/api/update/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update(id):
-    task = Role.query.get_or_404(id)
+    task = Permission.query.get_or_404(id)
     if request.method == "POST":
         task.content = request.form['content']
     else:

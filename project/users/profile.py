@@ -5,7 +5,7 @@ import flask_login
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 # from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required
-from project.models import User, Role, Api
+from project.models import User, Api, Permission
 from project.app_object import db
 
 prof = Blueprint('prof', __name__)
@@ -16,7 +16,7 @@ prof = Blueprint('prof', __name__)
 def profile():
     cur_user_id = flask_login.current_user.id
     user = User.query.get_or_404(flask_login.current_user.id)
-    role = db.session.query(User, Role).filter(Role.id == User.role_id).filter(User.id == cur_user_id).all()
+    role = db.session.query(User, Permission).filter(Permission.id == User.role_id).filter(User.id == cur_user_id).all()
     api_info = db.session.query(Api, User).filter(Api.user_id == User.id).filter(User.id == cur_user_id).all()
 
     return render_template('profile.html', user=user, role=role, api_info=api_info)

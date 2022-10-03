@@ -30,13 +30,13 @@ def create_app():
     from project.users.profile import prof
     from project.main.routes import main
     from project.errors.handlers import errors
-    from project.role.manage_role import role
+    from project.users.manage_users import users_bp
     from project.api.routes import api
     app.register_blueprint(auth)
     app.register_blueprint(prof)
     app.register_blueprint(main)
     app.register_blueprint(errors)
-    app.register_blueprint(role)
+    app.register_blueprint(users_bp)
     app.register_blueprint(api)
     return app
 

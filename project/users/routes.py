@@ -44,22 +44,26 @@ def signup():
 @auth.route('/signup', methods=['POST'])
 def signup_post():
     email = request.form.get('email')
-    name = request.form.get('name')
+    username = request.form.get('name')
     password = request.form.get('password')
 
-    user = User.query.filter_by(email=email).first()  # if this returns a user, then the email already exists in database
+    email_exists = User.query.filter_by(email=email).first()  # if this returns a user, then the email already exists in database
+    user_exists = User.query.filter_by(username=username).first()  # if this returns a user, then the email already exists in database
 
-    if user:  # if a user is found, we want to redirect back to signup page so user can try again
+    if email_exists:  # if a user is found, we want to redirect back to signup page so user can try again
         flash('Email address already exists')
+        return redirect(url_for('auth.signup'))
+    elif user_exists:
+        flash('Username is already taken, please try another one!')
         return redirect(url_for('auth.signup'))
 
     # create new user with the form data. Hash the password so plaintext version isn't saved.
-    new_user = User(role_id=2, email=email, username=name, password=generate_password_hash(password, method='sha256'))
+    new_user = User(email=email, username=username, password=generate_password_hash(password, method='sha256'), permission_id=1)
 
     # add the new user to the database
     db.session.add(new_user)
     db.session.commit()
-
+    db.session.close()
     return redirect(url_for('auth.login'))
 
 

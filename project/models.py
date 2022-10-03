@@ -5,7 +5,7 @@ import flask_login
 # from sqlalchemy import insert
 # from flask import Flask, current_app
 from sqlalchemy.orm import backref
-from sqlalchemy import create_engine
+# from sqlalchemy import create_engine, JSON
 
 from project import login_manager
 from flask_login import UserMixin
@@ -18,45 +18,59 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class Role(db.Model):
-    __tablename__ = "role"
-    id = db.Column(db.Integer, primary_key=True)
-    role_name = db.Column(db.String(20), unique=True, nullable=False)
-    role_desc = db.Column(db.String(200), nullable=True)
-    date_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
-    db.Column('date_created', db.DateTime, onupdate=datetime.now)
+# class Role(db.Model):
+#     __tablename__ = "role"
+#     id = db.Column(db.Integer, primary_key=True)
+#     role_name = db.Column(db.String(20), unique=True, nullable=False)
+#     role_desc = db.Column(db.String(200), nullable=True)
+#     date_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
+#     db.Column('date_created', db.DateTime, onupdate=datetime.now)
+#
+#     def __init__(self, role_name, role_desc=''):
+#         self.role_name = role_name
+#         self.role_desc = role_desc
+#
+#     def __repr__(self):
+#         return f"Role {self.role_name}: {self.role_desc}"
 
-    def __init__(self, role_name, role_desc=''):
-        self.role_name = role_name
-        self.role_desc = role_desc
+class Permission(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    permission_name = db.Column(db.String(20), nullable=False, unique=True)
+    action = db.Column(db.String(40), nullable=False, unique=True)
+    date_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
+
+    def __init__(self, permission_name, action):
+        self.permission_name = permission_name
+        self.action = action
 
     def __repr__(self):
-        return f"Role {self.role_name}: {self.role_desc}"
+        return f"Permission: {self.permission_name}"
 
 
 class User(db.Model, UserMixin):
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
     username = db.Column(db.String(40), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(200), nullable=False)
-    role = db.relationship("Role", backref=backref("user", uselist=False))
+    permission_id = db.Column(db.Integer, db.ForeignKey('permission.id'), nullable=False)
+    permission = db.relationship("Permission", backref=backref("user", uselist=False))
     user_desc = db.Column(db.String(200), nullable=True)
-    # date_created = db.Column(db.DateTime(), default=datetime.utcnow)
+    authenticate_by = db.Column(db.String(10), unique=False, nullable=False)
     date_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
     # db.Column('date_created', db.DateTime, onupdate=datetime.now)
 
-    def __init__(self, username, email, password, role_id):
+    def __init__(self, username, email, password, permission_id, authenticate_by='email'):
         self.username = username
         self.email = email
         self.password = password
-        self.role_id = role_id
+        self.permission_id = permission_id
+        self.authenticate_by = authenticate_by
 
     def __repr__(self):
-        return f"User: {self.username}"
+        return f"User: {self.username}, {self.permission_id}"
 
 
 class Api(db.Model):
@@ -79,6 +93,19 @@ class Api(db.Model):
 
     def __repr__(self):
         return f"Api {self.id} {self.api_username}"
+
+
+db.create_all()
+
+# enter Permissions Data
+try:
+    for v in [["Read Only", "GET"], ["Read/Write", "GET, POST"], ["Full Access", "GET, POST, DELETE"],
+              ["Administrator", "GET, POST, DELETE, DB"]]:
+        p = Permission(v[0], v[1])
+        db.session.add(p)
+        db.session.commit()
+except:
+    pass
 
 
 # class Profile(db.Model):

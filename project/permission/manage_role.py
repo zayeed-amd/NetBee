@@ -4,15 +4,14 @@ from flask_login import login_required
 
 # from project.app_object import app
 from project import db
-from project.models import Role, User
-
+from project.models import Permission, User
 # from werkzeug.security import generate_password_hash, check_password_hash
 # from flask_login import login_user, logout_user, login_required
-role = Blueprint('role', __name__)
-# db = SQLAlchemy(app)
+
+perm = Blueprint('perm', __name__)
 
 
-@role.route('/role', methods=['GET', 'POST'])
+@perm.route('/Permission', methods=['GET', 'POST'])
 @login_required
 def index():
     if request.method == "POST":
@@ -20,31 +19,31 @@ def index():
         role_desc = request.form["role_desc"]
         if not role_name:
             return render_template(template_name_or_list='errors.html', errors="Content is empty")
-        new_role = Role(role_name=role_name, role_desc=role_desc)
+        new_role = Permission(role_name=role_name, role_desc=role_desc)
         try:
             db.session.add(new_role)
             db.session.commit()
             db.session.close()
-            return redirect('/role')  # or redirect(url_for("index"))
+            return redirect('/permission')  # or redirect(url_for("index"))
         except Exception as e:
             return f"There is an error accepting your input: {e}"
         finally:
             db.session.close()
     else:
-        roles = Role.query.order_by(Role.date_created).all()
+        roles = Permission.query.order_by(Permission.date_created).all()
         # return str(roles)
         return render_template(template_name_or_list='role/role.html', roles=roles, user=flask_login.current_user)
 
 
-@role.route('/errors', methods=['GET'])
+@perm.route('/errors', methods=['GET'])
 def errors(err):
     return err
 
 
-@role.route('/role/delete/<int:id>')
+@perm.route('/role/delete/<int:id>')
 @login_required
 def delete(id):
-    role = Role.query.get_or_404(id)
+    role = Permission.query.get_or_404(id)
     try:
         if not flask_login.current_user.role_id == 1:
             return "Error"
@@ -56,10 +55,10 @@ def delete(id):
         db.session.close()
 
 
-@role.route('/role/update/<int:id>', methods=['GET', 'POST'])
+@perm.route('/role/update/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update(id):
-    task = Role.query.get_or_404(id)
+    task = Permission.query.get_or_404(id)
     if request.method == "POST":
         task.content = request.form['content']
     else:

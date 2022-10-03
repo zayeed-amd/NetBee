@@ -1,0 +1,7 @@
+flask_bcrypt
+flask_login
+flask_mail
+flask_sqlalchemy
+meraki
+mysqlclient
+

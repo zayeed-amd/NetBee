@@ -21,7 +21,7 @@ function searchList() {
   }
 }
 
-function searchTableData() {
+function searchTableData(td_index=1) {
   // Declare variables
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("myInput");
@@ -31,7 +31,7 @@ function searchTableData() {
 
   // Loop through all table rows, and hide those who don't match the search query
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];  // index of td by which you need to filter
+    td = tr[i].getElementsByTagName("td")[td_index];  // index of td by which you need to filter
     if (td) {
       txtValue = td.textContent || td.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {

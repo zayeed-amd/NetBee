@@ -1,5 +1,5 @@
 import flask_login
-from flask import render_template, request, Blueprint
+from flask import render_template, request, Blueprint, send_from_directory
 from flask_login import login_required
 
 from project.meraki_api.organizations import Organizations
@@ -33,3 +33,27 @@ def organizations():
 @main.route('/networks')
 def networks():
     return render_template('meraki/networks.html', networks=Organizations().get_all_networks_for_orgs())
+
+
+@main.route('/organizations/networks', methods=['POST'])
+def orgs():
+    if request.method == "POST":
+        orgs_selected = request.form.getlist('orgs')
+        networks = list()
+        for org_id in orgs_selected:
+            nets = Organizations().get_all_networks(org_id)
+            if isinstance(networks, list):
+                for n in nets:
+                    if isinstance(n, dict):
+                        networks.append(n)
+                    else:
+                        return f"Error: Unexpected Data format {type(n)}, expected: dict"
+            elif isinstance(nets, dict):
+                networks.append(nets)
+        return render_template('meraki/networks_by_orgs.html', networks=networks)
+
+    return "Error: Method not allowed"
+
+# @main.route("/static/<path:path>")
+# def static_dir(path):
+#     return send_from_directory("static", path)

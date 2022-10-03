@@ -1,11 +1,11 @@
 import os
-
+import sys
 
 class Config:
     # SECRET_KEY = os.environ.get('SECRET_KEY')
     SECRET_KEY = "netbee-secret-key-001"
     # SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:123456@localhost:3306/netbee'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:123456@localhost:3306/netbee' if sys.platform.startswith('win') else 'mysql://root@localhost:3306/netbee'
     # SQLALCHEMY_DATABASE_URI = 'sqlite:///netbee'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = 'smtp.googlemail.com'

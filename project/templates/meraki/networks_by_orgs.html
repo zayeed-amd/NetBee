@@ -1,0 +1,47 @@
+{% extends 'base2.html' %}
+
+{% block head %}
+<h1> Template </h1>
+<link href="../static/css/tables.css" rel="stylesheet" />
+
+
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid">
+  <h1 class="mt-4">Networks by Organizations selected</h1>
+  {% if errors%}
+        <p>{{errors}}</p>
+  {% endif %}
+  <table border="1" id="customers">
+        <tr>
+            <th>Net ID</th>
+            <th>Name</th>
+            <th>Org ID</th>
+            <th>Product Types</th>
+            <th>Edit</th>
+        </tr>
+        {% for net in networks %}
+       <!-- dict_keys(['id', 'organizationId', 'name', 'productTypes', 'timeZone', 'tags', 'enrollmentString', 'url', 'notes', 'isBoundToConfigTemplate']) -->
+        <tr>
+            <td>{{net.id}}</td>
+            <td>{{net.name}}</td>
+            <td>{{net.organizationId}}</td>
+            <td>{{net.productTypes}}</td>
+            <td>
+                <a href="/get/{{net.id}}">Get</a><br>
+                <a href="/delete/{{net.id}}">Delete</a><br>
+                <a href="/put/{{net.id}}">Put</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <form action="/" method="POST">
+        <input type="text" name="content" id="content">
+        <input type="submit" name="submit" value="Add Task">
+    </form>
+</div>
+
+{% endblock %}
