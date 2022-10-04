@@ -36,7 +36,7 @@ def networks():
 
 
 @main.route('/organizations/networks', methods=['POST'])
-def orgs():
+def networks_by_org():
     if request.method == "POST":
         orgs_selected = request.form.getlist('orgs')
         networks = list()
@@ -53,6 +53,27 @@ def orgs():
         return render_template('meraki/networks_by_orgs.html', networks=networks)
 
     return "Error: Method not allowed"
+
+
+@main.route('/organizations/users', methods=['POST'])
+def users_by_orgs():
+    if request.method == "POST":
+        orgs_selected = request.form.getlist('orgs')
+        all_users = list()
+        for org_id in orgs_selected:
+            users = Organizations().get_all_users(org_id)
+            if isinstance(all_users, list):
+                for n in users:
+                    if isinstance(n, dict):
+                        all_users.append(n)
+                    else:
+                        return f"Error: Unexpected Data format {type(n)}, expected: dict"
+            elif isinstance(users, dict):
+                all_users.append(users)
+        return render_template('meraki/users_by_orgs.html', users=all_users)
+
+    return "Error: Method not allowed"
+
 
 # @main.route("/static/<path:path>")
 # def static_dir(path):

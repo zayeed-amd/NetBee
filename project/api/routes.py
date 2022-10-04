@@ -48,14 +48,17 @@ def errors(err):
 def delete(id):
     api = Api.query.get_or_404(id)
     try:
-        if not flask_login.current_user.role_id == 1:
+        if flask_login.current_user.permission_id != 4:
             return "Error"
         # db.session.close()
         db.session.delete(api)
         db.session.commit()
         return redirect('/api')
+    except:
+        return "Error due to exception"
     finally:
-        db.session.close()
+        # db.session.close()
+        pass
 
 
 @api.route('/api/update/<int:id>', methods=['GET', 'POST'])
@@ -65,7 +68,7 @@ def update(id):
     if request.method == "POST":
         task.content = request.form['content']
     else:
-        return render_template(template_name_or_list='update.html', task=task)
+        return render_template(template_name_or_list='update_api.html', task=task)
 
     try:
         db.session.commit()

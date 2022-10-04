@@ -1,0 +1,47 @@
+{% extends 'base2.html' %}
+
+{% block head %}
+<h1> Template </h1>
+<link href="../static/css/tables.css" rel="stylesheet" />
+
+
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid">
+  <h1 class="mt-4">Users by Organizations selected</h1>
+  {% if errors%}
+        <p>{{errors}}</p>
+  {% endif %}
+  <table border="1" id="customers">
+        <tr>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Authentication Method</th>
+            <th>Edit</th>
+        </tr>
+        {% for user in users %}
+       <!-- dict_keys(['id', 'name', 'email', 'authenticationMethod', 'orgAccess', 'accountStatus', 'twoFactorAuthEnabled', 'hasApiKey', 'lastActive', 'networks', 'tags']) -->
+        <tr>
+            <td>{{user.id}}</td>
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.authenticationMethod}}</td>
+            <td>
+                <a href="/get/{{user.id}}">Get</a><br>
+                <a href="/delete/{{user.id}}">Delete</a><br>
+                <a href="/put/{{user.id}}">Put</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <form action="/" method="POST">
+        <input type="text" name="content" id="content">
+        <input type="submit" name="submit" value="Add Task">
+    </form>
+</div>
+
+{% endblock %}

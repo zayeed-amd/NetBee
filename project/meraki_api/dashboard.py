@@ -4,7 +4,7 @@
 
 import meraki
 
-sandbox_api = "0bcef274156a3fa883c058950bcd9f1446bf392d"  # do not delete
+sandbox_api = "13fd2c1359dc334a089c9361172ecd98744620aa"  # do not delete
 zac_api = "bab27aa19220dfab302ab6a68c3bd21bc8b00f7a"
 dashboard = meraki.DashboardAPI(api_key=sandbox_api, output_log=False, print_console=False)
 
