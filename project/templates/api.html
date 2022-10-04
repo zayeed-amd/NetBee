@@ -1,6 +1,7 @@
 {% extends 'base2.html' %}
 
 {% block head %}
+<link href="../static/css/tables.css" rel="stylesheet" />
 {% endblock %}
 
 
@@ -13,7 +14,7 @@
         <p>{{errors}}</p>
     {% endif %}
 
-    <table border="1">
+    <table border="1" id="customers">
         <tr>
             <th>Provider</th>
             <th>Username</th>
@@ -29,7 +30,7 @@
             <td>{{a.api_password}}</td>
             <td>{{a.api_key}}</td>
             <td>{{a.date_created.date()}}</td>
-            {% if user.role_id == 1 %}
+            {% if user.permission_id == 4 %}
             <td>
                 <a href="api/delete/{{a.id}}">Delete</a><br>
                 <a href="api/update/{{a.id}}">Update</a>
@@ -38,8 +39,8 @@
         </tr>
         {% endfor %}
     </table>
-
-    {% if user.role_id == 1 %}
+    <br>
+    {% if user.permission_id == 4 %}
     <form action="/api" method="POST">
        Provider: <input type="text" name="api_provider" id="api_provider"><br>
        Username: <input type="text" name="api_username" id="api_username"><br>

@@ -34,7 +34,7 @@
       {% endfor %}
   </select>
 
-  <form action="/organizations/networks" method="POST">
+  <form action="/" method="POST">
   <table border="1"  id="myTable">
         <tr class="header">
             <th style="width:1%;">Select</th>
@@ -59,7 +59,9 @@
     </table>
     <br>
         <!--input type="text" name="content" id="content"-->
-        <input type="submit" name="submit" value="Search Networks">
+        <!--input type="submit" name="submit" value="Search Networks" -->
+        <input type="submit" onclick='this.form.action="/organizations/networks";' value="Search Networks">
+        <input type="submit" onclick='this.form.action="/organizations/users";' value="All Users">
 
     </form>
 </div>
