@@ -31,10 +31,9 @@
             {% if current_user.permission_id == 3 or  current_user.permission_id == 4 %}
             <td>
                 {% if ui.User.id != current_user.id %}
-                <p>{{current_user.id}}</p>
                 <a href="users/delete/{{ui.User.id}}">Delete</a><br>
                 {% endif %}
-                <a href="users/update/{{ui.User.id}}">Update</a>
+                <a href="users/edit/{{ui.User.id}}">Update</a>
             </td>
             {% endif %}
         </tr>
