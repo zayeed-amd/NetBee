@@ -1,7 +1,7 @@
 {% extends 'base2.html' %}
 
 {% block head %}
-<link href="../../static/css/styles.css" rel="stylesheet" />
+<!--link href="../../static/css/styles.css" rel="stylesheet" /-->
 {% endblock %}
 
 
@@ -15,11 +15,12 @@
     {% endif %}
 
     <form action="/users/update" method="POST">
+       <input type="hidden" id="id" name="id" value="{{user.id}}">
        Username: <input type="text" name="username" id="username" value="{{user.username}}"><br>
        Email: <input type="text" name="email" id="email" value="{{user.email}}"><br>
        Password: <input type="password" name="password" id="password" value="{{user.password}}"><br>
        Permission:
-        <select name="permission_type">
+        <select name="permission_id">
             {% for p in permissions %}
                 {% if user.permission_id == p.id %}
                     <option value="{{p.id}}" selected >{{p.permission_name}}</option>
