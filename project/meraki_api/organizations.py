@@ -1,24 +1,23 @@
-# import meraki
 import meraki
 
-from project.meraki_api.dashboard import dashboard
+from project.meraki_api.dashboard import get_dashboard
 
 
 # from meraki import Networks
 
-class Organizations():
+class Organizations:
     def __init__(self):
-        pass
+        self.dashboard = None
+        if not self.dashboard:
+            self.dashboard = get_dashboard()
 
-    @staticmethod
-    def get_all():
+    def get_all(self):
         # dashboard.organizations.getOrganizationNetworks()
-        return dashboard.organizations.getOrganizations()
+        return self.dashboard.organizations.getOrganizations()
 
-    @staticmethod
-    def get_all_networks(id):
+    def get_all_networks(self, id):
         try:
-            return dashboard.organizations.getOrganizationNetworks(id)
+            return self.dashboard.organizations.getOrganizationNetworks(id)
         except meraki.exceptions.APIError as e:
             print(e)
             return list()
@@ -41,7 +40,7 @@ class Organizations():
         # {'id': '646829496481090803', 'name': 'Test-org', 'url': 'https://n149.meraki.com/o/KsrL3cvc/manage/organization/overview',
         # 'api': {'enabled': True}, 'licensing': {'model': 'co-term'}, 'cloud': {'region': {'name': 'North America'}}}
         # users = dashboard.organizations.getOrganizationAdmins(organizationId='549236')
-        users = dashboard.organizations.getOrganizationAdmins(organizationId=f"{id}")
+        users = self.dashboard.organizations.getOrganizationAdmins(organizationId=f"{id}")
         # print(users)
         # for u in users:
         #     print(u.keys())
@@ -52,14 +51,15 @@ class Organizations():
 
 class Networks():
     def __init__(self):
-        pass
+        self.dashboard = None
+        if not self.dashboard:
+            self.dashboard = get_dashboard()
 
-    @staticmethod
-    def get_network(organization_id):
-        return dashboard.networks.getNetwork(organization_id)
+    def get_network(self, organization_id):
+        return self.dashboard.networks.getNetwork(organization_id)
 
     def get_networks(self, org_ids):
-        dashboard.organizations.getOrganizationNetworks()
+        self.dashboard.organizations.getOrganizationNetworks()
 
 
 # dashboard.switch.()
