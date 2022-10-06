@@ -26,4 +26,16 @@ def get_dashboard():
     dashboard = meraki.DashboardAPI(api_key=api_key, output_log=False, print_console=False)
     return dashboard
 
-# get_dashboard()
+
+def get_dashboard_static():
+    api_key = "ac84e73e2d143efa3eb1d098b884d02928be5e68"
+    dashboard = meraki.DashboardAPI(api_key=api_key, output_log=False, print_console=False)
+    return dashboard
+
+
+# d = get_dashboard_static()
+# d.switch.getDeviceSwitchPorts()
+# p = d.switch.getOrganizationSwitchPortsBySwitch('549236')
+# print(p)
+# x = d.switch.get
+# print(x)
