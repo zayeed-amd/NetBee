@@ -3,13 +3,27 @@
 # https://account.meraki.com/login/dashboard_login?email=&password_login=true
 
 import meraki
+from sqlalchemy.exc import PendingRollbackError
 
-sandbox_api = "13fd2c1359dc334a089c9361172ecd98744620aa"  # do not delete
-zac_api = "bab27aa19220dfab302ab6a68c3bd21bc8b00f7a"
-dashboard = meraki.DashboardAPI(api_key=sandbox_api, output_log=False, print_console=False)
+from project import db
+from flask_login import current_user
+from project.models import Api
 
 
+def get_dashboard():
+    api_key = "ac84e73e2d143efa3eb1d098b884d02928be5e68"
+    try:
+        api = db.session.query(Api).filter(Api.user_id == current_user.id).first()
+    except PendingRollbackError:
+        db.session.rollback()
+        api = db.session.query(Api).filter(Api.user_id == current_user.id).first()
 
-# dashboard.networks.get
+    # if not api:
+    #     raise KeyError(f"API key not found for user: {current_user.id}")
 
-# dashboard.switch.updateNetworkSwitchMtu()
+    if api:
+        api_key = api.api_key
+    dashboard = meraki.DashboardAPI(api_key=api_key, output_log=False, print_console=False)
+    return dashboard
+
+# get_dashboard()

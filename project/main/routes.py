@@ -27,7 +27,7 @@ def about():
 
 @main.route('/organizations')
 def organizations():
-    return render_template('meraki/organizations.html', orgs=Organizations.get_all())
+    return render_template('meraki/organizations.html', orgs=Organizations().get_all())
 
 
 @main.route('/networks')

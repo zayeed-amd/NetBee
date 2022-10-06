@@ -1,0 +1,28 @@
+{% extends 'base2.html' %}
+
+{% block head %}
+<!--link href="../../static/css/styles.css" rel="stylesheet" /-->
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid">
+    <h1>
+        Update API
+    </h1>
+    {% if errors%}
+        <p>{{errors}}</p>
+    {% endif %}
+
+    <form action="/api/update" method="POST">
+       <input type="hidden" id="id" name="id" value="{{api.id}}">
+       Provider: <input type="text" name="api_provider" id="api_provider" value="{{api.api_provider}}"><br>
+       Username: <input type="text" name="api_username" id="api_username" value="{{api.api_username}}"><br>
+       Password: <input type="text" name="api_password" id="password" value="{{api.api_password}}"><br>
+       API Key: <input type="text" name="api_key" id="api_key" value="{{api.api_key}}"><br>
+       User Id: <input type="text" name="user_id" id="user_id" value="{{api.user_id}}"><br>
+        <input type="submit" name="submit" value="Update">
+    </form>
+
+</div>
+{% endblock %}
