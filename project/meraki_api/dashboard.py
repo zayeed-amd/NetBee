@@ -10,32 +10,39 @@ from flask_login import current_user
 from project.models import Api
 
 
-def get_dashboard():
-    api_key = "ac84e73e2d143efa3eb1d098b884d02928be5e68"
+def get_api_key():
+
+    api = None
     try:
         api = db.session.query(Api).filter(Api.user_id == current_user.id).first()
     except PendingRollbackError:
         db.session.rollback()
         api = db.session.query(Api).filter(Api.user_id == current_user.id).first()
-
-    # if not api:
-    #     raise KeyError(f"API key not found for user: {current_user.id}")
+    except AttributeError:
+        pass
 
     if api:
-        api_key = api.api_key
-    dashboard = meraki.DashboardAPI(api_key=api_key, output_log=False, print_console=False)
+        return api.api_key
+
+    api_key = "8646ff4c4c17f1db3b6fce47c97a8c0aaad828af"
+    print(f"Could not get an API key from Database for this user, using: {api_key}")
+    return api_key
+
+
+def get_dashboard():
+    dashboard = meraki.DashboardAPI(api_key=get_api_key(), output_log=False, print_console=False)
     return dashboard
 
 
-def get_dashboard_static():
-    api_key = "ac84e73e2d143efa3eb1d098b884d02928be5e68"
-    dashboard = meraki.DashboardAPI(api_key=api_key, output_log=False, print_console=False)
-    return dashboard
-
-
-# d = get_dashboard_static()
+# d = get_dashboard()
 # d.switch.getDeviceSwitchPorts()
 # p = d.switch.getOrganizationSwitchPortsBySwitch('549236')
 # print(p)
 # x = d.switch.get
 # print(x)
+# x = d.switch.getDeviceSwitchPorts('Q2GW-2BWP-FQHX')
+# print(x)
+
+# d.sm.getNetworkSmUsers()
+# d.networks.
+
