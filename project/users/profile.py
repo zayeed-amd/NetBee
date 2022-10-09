@@ -16,25 +16,27 @@ prof = Blueprint('prof', __name__)
 def profile():
     cur_user_id = flask_login.current_user.id
     user = User.query.get_or_404(flask_login.current_user.id)
-    role = db.session.query(User, Permission).filter(Permission.id == User.role_id).filter(User.id == cur_user_id).all()
+    permission = db.session.query(Permission).filter(Permission.id == User.permission_id).filter(User.id == cur_user_id).first()
     api_info = db.session.query(Api, User).filter(Api.user_id == User.id).filter(User.id == cur_user_id).all()
+    # print(permission)
+    # for p in permission:
+    #     print(p)
+    return render_template('profile.html', user=user, permission=permission, api_info=api_info)
 
-    return render_template('profile.html', user=user, role=role, api_info=api_info)
 
-
-@prof.route('/profile/delete/<int:id>')
-@login_required
-def delete(id):
-    role = Role.query.get_or_404(id)
-    try:
-        if not flask_login.current_user.role_id == 1:
-            return "Error"
-        # db.session.close()
-        db.session.delete(role)
-        db.session.commit()
-        return redirect('/role')
-    finally:
-        db.session.close()
+# @prof.route('/profile/delete/<int:id>')
+# @login_required
+# def delete(id):
+#     role = Role.query.get_or_404(id)
+#     try:
+#         if not flask_login.current_user.role_id == 1:
+#             return "Error"
+#         # db.session.close()
+#         db.session.delete(role)
+#         db.session.commit()
+#         return redirect('/role')
+#     finally:
+#         db.session.close()
 
 
 @prof.route('/profile/update/<int:id>', methods=['GET', 'POST'])
