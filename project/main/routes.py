@@ -20,22 +20,26 @@ def home():
 
 
 @main.route("/about")
+@login_required
 def about():
     # return render_template('about.html', title='About')
     return r"/about "
 
 
 @main.route('/organizations')
+@login_required
 def organizations():
     return render_template('meraki/organizations.html', orgs=Organizations().get_all())
 
 
 @main.route('/networks')
+@login_required
 def networks():
     return render_template('meraki/networks.html', networks=Organizations().get_all_networks_for_orgs())
 
 
 @main.route('/organizations/networks', methods=['POST'])
+@login_required
 def networks_by_org():
     if request.method == "POST":
         orgs_selected = request.form.getlist('orgs')
@@ -56,6 +60,7 @@ def networks_by_org():
 
 
 @main.route('/organizations/users', methods=['POST'])
+@login_required
 def users_by_orgs():
     if request.method == "POST":
         orgs_selected = request.form.getlist('orgs')

@@ -24,7 +24,7 @@ def get_api_key():
     if api:
         return api.api_key
 
-    api_key = "8646ff4c4c17f1db3b6fce47c97a8c0aaad828af"
+    api_key = "d2c72e197edb50682e14683102faa796f8b6e520"
     print(f"Could not get an API key from Database for this user, using: {api_key}")
     return api_key
 
@@ -44,5 +44,8 @@ def get_dashboard():
 # print(x)
 
 # d.sm.getNetworkSmUsers()
-# d.networks.
+# vlans = d.appliance.getNetworkAppliancePorts('L_646829496481112152')
+# print(vlans)
 
+
+# check VLANS: DevNetSandbox -> DNENT1-> Security & SD- WAN -> Addressing and VLANS

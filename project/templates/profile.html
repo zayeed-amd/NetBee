@@ -15,12 +15,9 @@
 <div class="container-fluid">
   <p>Name: {{user.username}}</p>
   <p>Email: {{user.email}}</p>
-
-  {% for r in role %}
-  <p>Role: {{r.Role.role_name}}</p>
-  <p>Description: {{r.Role.role_desc}}</p>
-  <p></p>
-  {% endfor %}
+  <!--p>{/{ permission| length  == 2}}</p-->
+  <p>Permission: {{permission.permission_name}}</p>
+  <p>Description: {{permission.action}}</p>
 
   API details:
   <table border="1" id="customers">
@@ -51,6 +48,4 @@
 4. Role
 5. API key
 6. Image
-
-
 -->
